@@ -25,13 +25,19 @@ class Room:
     def neighbors_are_safe(self):
         return all([neighbor.is_empty() for neighbor in self.neighbors])
 
+    def neighbor(self, number):
+        for neighbor in self.neighbors:
+            if neighbor.number == number:
+                return neighbor
+        return None
+
     def exits(self):
-        return self.neighbors
+        return [neighbor.number for neighbor in self.neighbors]
 
     def random_neighbor(self):
-        if len(self.exits()) == 0:
+        if len(self.neighbors) == 0:
             return None
-        return random.choice(self.exits())
+        return random.choice(self.neighbors)
 
     def connect(self, other_room):
         self.neighbors.append(other_room)
