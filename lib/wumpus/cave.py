@@ -23,10 +23,10 @@ class Cave:
         return room
 
     def random_room(self):
-        return random.choice(self.neighbors.values())
+        return random.choice(list(self.neighbors.values()))
 
     def add_hazard(self, hazard, number_of_rooms):
-        rooms = random.sample(self.neighbors.values(), number_of_rooms)
+        rooms = random.sample(list(self.neighbors.values()), number_of_rooms)
         for room in rooms:
             room.add(hazard)
 
