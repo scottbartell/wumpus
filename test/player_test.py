@@ -19,23 +19,15 @@ class TestPlayer(unittest.TestCase):
         empty_room.connect(bat_room)
         empty_room.connect(wumpus_room)
 
-        for _ in player.sense("bats"):
-            sensed.add("You hear a rustling")
+        player.sense("bats", lambda: sensed.add("You hear a rustling"))
+        player.sense("wumpus", lambda: sensed.add("You smell something terrible"))
+        player.encounter("wumpus", lambda: encountered.add("The wumpus ate you up!"))
+        player.encounter("bats", lambda: encountered.add("The bats whisk you away!"))
 
-        for _ in player.sense("wumpus"):
-            sensed.add("You smell something terrible")
-
-        for _ in player.encounter("bats"):
-            sensed.add("The wumpus ate you up!")
-
-        for _ in player.encounter("bats"):
-            sensed.add("The bats whisk you away!")
-
-        for destination in player.action("move"):
-            player.enter(destination)
+        player.action("move", lambda destination: player.enter(destination))
 
         player.enter(empty_room)
-        player.explore_room
+        player.explore_room()
 
         self.assertEqual(sensed, set(["You hear a rustling", "You smell something terrible"]))
         self.assertTrue(len(encountered) == 0)
@@ -54,21 +46,12 @@ class TestPlayer(unittest.TestCase):
         empty_room.connect(bat_room)
         empty_room.connect(wumpus_room)
 
-        for _ in player.sense("bats"):
-            sensed.add("You hear a rustling")
+        player.sense("bats", lambda: sensed.add("You hear a rustling"))
+        player.sense("wumpus", lambda: sensed.add("You smell something terrible"))
+        player.encounter("wumpus", lambda: encountered.add("The wumpus ate you up!"))
+        player.encounter("bats", lambda: encountered.add("The bats whisk you away!"))
 
-        for _ in player.sense("wumpus"):
-            sensed.add("You smell something terrible")
-
-        for _ in player.encounter("bats"):
-            sensed.add("The wumpus ate you up!")
-
-        for _ in player.encounter("bats"):
-            sensed.add("The bats whisk you away!")
-
-        for destination in player.action("move"):
-            player.enter(destination)
-
+        player.action("move", lambda destination: player.enter(destination))
         player.enter(wumpus_room)
         encountered.clear()
         player.enter(bat_room)
@@ -89,27 +72,19 @@ class TestPlayer(unittest.TestCase):
         empty_room.connect(bat_room)
         empty_room.connect(wumpus_room)
 
-        for _ in player.sense("bats"):
-            sensed.add("You hear a rustling")
+        player.sense("bats", lambda: sensed.add("You hear a rustling"))
+        player.sense("wumpus", lambda: sensed.add("You smell something terrible"))
+        player.encounter("wumpus", lambda: encountered.add("The wumpus ate you up!"))
+        player.encounter("bats", lambda: encountered.add("The bats whisk you away!"))
 
-        for _ in player.sense("wumpus"):
-            sensed.add("You smell something terrible")
-
-        for _ in player.encounter("bats"):
-            sensed.add("The wumpus ate you up!")
-
-        for _ in player.encounter("bats"):
-            sensed.add("The bats whisk you away!")
-
-        for destination in player.action("move"):
-            player.enter(destination)
+        player.action("move", lambda destination: player.enter(destination))
 
         player.enter(empty_room)
 
-        self.assertEqual(Player.room, empty_room)
+        self.assertEqual(player.room, empty_room)
 
         player.act("move", wumpus_room)
         self.assertEqual(player.room, wumpus_room)
 
-        self.assertEqual(encountered, set["The wumpus ate you up!"])
+        self.assertEqual(encountered, set(["The wumpus ate you up!"]))
         self.assertTrue(len(sensed) == 0)
